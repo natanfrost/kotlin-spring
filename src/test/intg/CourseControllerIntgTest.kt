@@ -62,4 +62,21 @@ class CourseControllerIntgTest {
 
         Assertions.assertEquals(2, savedCourseDTO!!.size)
     }
+
+    @Test
+    fun updateCourse() {
+        val course = Course(1, name = "Test 1", category = "Cat Test")
+
+        val updatedCourse = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", course.id)
+            .bodyValue(course)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertEquals("Cat Test", course.category)
+    }
 }
