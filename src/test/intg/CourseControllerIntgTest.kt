@@ -1,6 +1,9 @@
 import com.course_catalog.course_catalog_service.CourseCatalogServiceApplication
 import com.course_catalog.course_catalog_service.dto.CourseDTO
+import com.course_catalog.course_catalog_service.entity.Course
+import com.course_catalog.course_catalog_service.repository.CourseRepository
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
@@ -18,6 +21,16 @@ class CourseControllerIntgTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
+    @Autowired
+    lateinit var couseRepository: CourseRepository
+
+    @BeforeEach
+    fun setUp() {
+        couseRepository.deleteAll();
+        val courses = listOf(Course(null, name = "Test 1", category = "Cat 1"), Course(null, name = "Test 2", category = "Cat 2"))
+        couseRepository.saveAll(courses)
+    }
+
     @Test
     fun addCourse() {
         val courseDTO = CourseDTO(id = null, name = "Test", category = "Cat Test")
@@ -34,5 +47,19 @@ class CourseControllerIntgTest {
         Assertions.assertTrue {
             savedCourseDTO!!.id != null
         }
+    }
+
+    @Test
+    fun getAllCourses() {
+        val savedCourseDTO = webTestClient
+            .get()
+            .uri("/v1/courses")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertEquals(2, savedCourseDTO!!.size)
     }
 }
