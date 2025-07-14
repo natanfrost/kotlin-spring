@@ -5,6 +5,8 @@ import com.course_catalog.course_catalog_service.entity.Course
 import com.course_catalog.course_catalog_service.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
 import jdk.jfr.Category
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -67,6 +69,16 @@ class CourseControllerUnitTest {
             .responseBody
 
         Assertions.assertEquals("Cat Test", course.category)
+    }
+
+    @Test
+    fun deleteCourse() {
+        every { courseServiceMock.deleteCourse(100) } just runs
+        val updatedCourse = webTestClient
+            .delete()
+            .uri("/v1/courses/{courseId}", 100)
+            .exchange()
+            .expectStatus().isNoContent
     }
 
     fun courseDTO(
