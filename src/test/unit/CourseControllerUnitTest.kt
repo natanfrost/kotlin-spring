@@ -1,6 +1,7 @@
 import com.course_catalog.course_catalog_service.CourseCatalogServiceApplication
 import com.course_catalog.course_catalog_service.controller.CourseController
 import com.course_catalog.course_catalog_service.dto.CourseDTO
+import com.course_catalog.course_catalog_service.entity.Course
 import com.course_catalog.course_catalog_service.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -47,6 +48,25 @@ class CourseControllerUnitTest {
             .responseBody
 
         Assertions.assertEquals(2, savedCourseDTO!!.size)
+    }
+
+    @Test
+    fun updateCourse() {
+        val course = Course(1, name = "Test 1", category = "Cat Test")
+
+        every { courseServiceMock.updateCourse(any(), any()) } returns courseDTO(id=100)
+
+        val updatedCourse = webTestClient
+            .put()
+            .uri("/v1/courses/{courseId}", 100)
+            .bodyValue(course)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertEquals("Cat Test", course.category)
     }
 
     fun courseDTO(
