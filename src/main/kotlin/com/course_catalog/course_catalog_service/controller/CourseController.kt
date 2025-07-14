@@ -4,7 +4,9 @@ import com.course_catalog.course_catalog_service.dto.CourseDTO
 import com.course_catalog.course_catalog_service.service.CourseService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -24,4 +26,8 @@ class CourseController(val courseService: CourseService) {
     fun getAllCourses() : List<CourseDTO> {
         return courseService.getAll();
     }
+
+    @PutMapping("/{course_id}")
+    fun updateCourse(@RequestBody courseDTO: CourseDTO,
+                     @PathVariable("course_id") courseId : Int) = courseService.updateCourse(courseDTO, courseId)
 }
