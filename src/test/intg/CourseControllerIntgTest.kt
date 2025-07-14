@@ -79,4 +79,15 @@ class CourseControllerIntgTest {
 
         Assertions.assertEquals("Cat Test", course.category)
     }
+
+    @Test
+    fun deleteCourse() {
+        val course = Course(1, name = "Test 1", category = "Cat Test")
+
+        val updatedCourse = webTestClient
+            .delete()
+            .uri("/v1/courses/{courseId}", course.id)
+            .exchange()
+            .expectStatus().isNoContent
+    }
 }
