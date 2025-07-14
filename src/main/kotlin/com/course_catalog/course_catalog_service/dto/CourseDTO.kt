@@ -5,3 +5,4 @@ data class CourseDTO(
     val name: String,
     val category: String
 );
+
