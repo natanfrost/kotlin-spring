@@ -1,7 +1,9 @@
 import com.course_catalog.course_catalog_service.CourseCatalogServiceApplication
 import com.course_catalog.course_catalog_service.dto.CourseDTO
 import com.course_catalog.course_catalog_service.entity.Course
+import com.course_catalog.course_catalog_service.entity.Instructor
 import com.course_catalog.course_catalog_service.repository.CourseRepository
+import com.course_catalog.course_catalog_service.repository.InstructorRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,16 +27,26 @@ class CourseControllerIntgTest {
     @Autowired
     lateinit var couseRepository: CourseRepository
 
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
+
     @BeforeEach
     fun setUp() {
         couseRepository.deleteAll();
-        val courses = listOf(Course(null, name = "Test 1", category = "Cat 1"), Course(null, name = "Test 2", category = "Cat 2"))
+        instructorRepository.deleteAll();
+        val instructor = Instructor(id = null, name = "Test Inst")
+        instructorRepository.save(instructor)
+        val courses = listOf(
+            Course(null, name = "Test 1", category = "Cat 1", instructor = instructor),
+            Course(null, name = "Test 2", category = "Cat 2", instructor = instructor)
+        )
         couseRepository.saveAll(courses)
     }
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(id = null, name = "Test", category = "Cat Test")
+        val instructor = instructorRepository.findAll().first()
+        val courseDTO = CourseDTO(id = null, name = "Test", category = "Cat Test", instructorId = instructor.id)
         val savedCourseDTO = webTestClient
             .post()
             .uri("/v1/courses")
@@ -100,7 +112,8 @@ class CourseControllerIntgTest {
 
     @Test
     fun deleteCourse() {
-        val course = Course(1, name = "Test 1", category = "Cat Test")
+        val instructor = instructorRepository.findAll().first()
+        val course = Course(1, name = "Test 1", category = "Cat Test", instructor = instructor)
 
         val updatedCourse = webTestClient
             .delete()
