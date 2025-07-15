@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class InstructorService(val instructorRepository : InstructorRepository) {
-    fun createInstructor(instructorDTO: InstructorDTO) {
+    fun addInstructor(instructorDTO: InstructorDTO) : InstructorDTO {
         val instructorEntity = instructorDTO.let {
             Instructor(it.id, it.name)
         }

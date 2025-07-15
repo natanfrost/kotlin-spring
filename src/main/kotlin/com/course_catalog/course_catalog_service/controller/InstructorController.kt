@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class InstructorController(val instructorService : InstructorService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createInstructor(@RequestBody @Valid instructorDTO: InstructorDTO) {
-        instructorService.createInstructor(instructorDTO)
+    fun addInstructor(@RequestBody @Valid instructorDTO: InstructorDTO) : InstructorDTO {
+        return instructorService.addInstructor(instructorDTO)
     }
 }
