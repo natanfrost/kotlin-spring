@@ -10,9 +10,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.util.UriComponentsBuilder
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 
 @SpringBootTest(
     classes = [CourseCatalogServiceApplication::class], // Add this
@@ -20,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder
 )
 @ActiveProfiles("test")
 @AutoConfigureWebClient
+@Testcontainers
 class CourseControllerIntgTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
@@ -29,6 +37,23 @@ class CourseControllerIntgTest {
 
     @Autowired
     lateinit var instructorRepository: InstructorRepository
+
+    companion object {
+        @Container
+        val postgresDB = PostgreSQLContainer<Nothing>(DockerImageName.parse("postgres:10.5")).apply {
+            withDatabaseName("testdb")
+            withUsername("postgres")
+            withPassword("secret")
+        }
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun properties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", postgresDB::getJdbcUrl)
+            registry.add("spring.datasource.username", postgresDB::getUsername)
+            registry.add("spring.datasource.password", postgresDB::getPassword)
+        }
+    }
 
     @BeforeEach
     fun setUp() {
@@ -115,10 +140,14 @@ class CourseControllerIntgTest {
         val instructor = instructorRepository.findAll().first()
         val course = Course(1, name = "Test 1", category = "Cat Test", instructor = instructor)
 
-        val updatedCourse = webTestClient
+        webTestClient
             .delete()
             .uri("/v1/courses/{courseId}", course.id)
             .exchange()
             .expectStatus().isNoContent
+
+        val deletedCourse = couseRepository.findByIdOrNull(course.id!!)
+
+        Assertions.assertEquals(deletedCourse, null)
     }
 }
