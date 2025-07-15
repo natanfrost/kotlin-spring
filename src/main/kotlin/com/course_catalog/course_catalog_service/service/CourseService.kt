@@ -54,4 +54,14 @@ class CourseService(val courseRepository: CourseRepository) {
             throw CourseNotFoundException("No course found for the passed ")
         }
     }
+
+    fun getAllByName(courseName: String?): List<CourseDTO> {
+        val courses = courseName?.let {
+            courseRepository.findByNameContaining(courseName)
+        } ?: courseRepository.findAll()
+
+        return courses.map {
+            CourseDTO(it.id, it.name, it.category)
+        }
+    }
 }
