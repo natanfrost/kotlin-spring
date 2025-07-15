@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.util.UriComponentsBuilder
 
 @SpringBootTest(
     classes = [CourseCatalogServiceApplication::class], // Add this
@@ -54,6 +55,23 @@ class CourseControllerIntgTest {
         val savedCourseDTO = webTestClient
             .get()
             .uri("/v1/courses")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        Assertions.assertEquals(2, savedCourseDTO!!.size)
+    }
+
+    @Test
+    fun getAllByName() {
+        val uri = UriComponentsBuilder.fromUriString("/v1/courses/name")
+            .queryParam("course_name", "Test")
+            .toUriString()
+        val savedCourseDTO = webTestClient
+            .get()
+            .uri(uri)
             .exchange()
             .expectStatus().isOk
             .expectBodyList(CourseDTO::class.java)
