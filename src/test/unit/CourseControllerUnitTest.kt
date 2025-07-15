@@ -2,18 +2,17 @@ import com.course_catalog.course_catalog_service.CourseCatalogServiceApplication
 import com.course_catalog.course_catalog_service.controller.CourseController
 import com.course_catalog.course_catalog_service.dto.CourseDTO
 import com.course_catalog.course_catalog_service.entity.Course
+import com.course_catalog.course_catalog_service.entity.Instructor
 import com.course_catalog.course_catalog_service.service.CourseService
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
-import jdk.jfr.Category
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.reactive.server.WebTestClient
 
@@ -29,7 +28,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse() {
-        val courseDTO = CourseDTO(null, "Test", "Cat Test")
+        val courseDTO = CourseDTO(null, "Test", "Cat Test", instructorId = 1)
 
         every { courseServiceMock.addCourse(any()) } returns courseDTO(id = 1)
         val savedCourseDTO = webTestClient
@@ -41,7 +40,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourse_validation() {
-        val courseDTO = CourseDTO(null, "Test", "")
+        val courseDTO = CourseDTO(null, "Test", "", instructorId = 1)
 
         every { courseServiceMock.addCourse(any()) } returns courseDTO(id = 1)
         val savedCourseDTO = webTestClient
@@ -55,8 +54,10 @@ class CourseControllerUnitTest {
     @Test
     fun getAllCourses() {
         every { courseServiceMock.getAll() }.returnsMany(
-            listOf(courseDTO(id = 1),
-                courseDTO(id = 2, name = "Test"))
+            listOf(
+                courseDTO(id = 1),
+                courseDTO(id = 2, name = "Test")
+            )
         )
         val savedCourseDTO = webTestClient
             .get()
@@ -72,9 +73,9 @@ class CourseControllerUnitTest {
 
     @Test
     fun updateCourse() {
-        val course = Course(1, name = "Test 1", category = "Cat Test")
+        val course = Course(1, name = "Test 1", category = "Cat Test", instructor = Instructor(id = 1, name = "A"))
 
-        every { courseServiceMock.updateCourse(any(), any()) } returns courseDTO(id=100)
+        every { courseServiceMock.updateCourse(any(), any()) } returns courseDTO(id = 100)
 
         val updatedCourse = webTestClient
             .put()
@@ -102,6 +103,7 @@ class CourseControllerUnitTest {
     fun courseDTO(
         id: Int? = null,
         name: String = "Test",
-        category: String = "Cat Test"
-    ) = CourseDTO(id, name, category)
+        category: String = "Cat Test",
+        instructorId: Int? = null
+    ) = CourseDTO(id, name, category, instructorId)
 }
