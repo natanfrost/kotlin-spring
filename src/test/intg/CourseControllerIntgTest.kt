@@ -1,9 +1,9 @@
-import com.course_catalog.course_catalog_service.CourseCatalogServiceApplication
-import com.course_catalog.course_catalog_service.dto.CourseDTO
-import com.course_catalog.course_catalog_service.entity.Course
-import com.course_catalog.course_catalog_service.entity.Instructor
-import com.course_catalog.course_catalog_service.repository.CourseRepository
-import com.course_catalog.course_catalog_service.repository.InstructorRepository
+import com.coursecatalog.CourseCatalogServiceApplication
+import com.coursecatalog.dto.CourseDTO
+import com.coursecatalog.entity.Course
+import com.coursecatalog.entity.Instructor
+import com.coursecatalog.repository.CourseRepository
+import com.coursecatalog.repository.InstructorRepository
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

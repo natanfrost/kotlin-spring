@@ -1,10 +1,10 @@
-package com.course_catalog.course_catalog_service.service
+package com.coursecatalog.service
 
-import com.course_catalog.course_catalog_service.dto.CourseDTO
-import com.course_catalog.course_catalog_service.entity.Course
-import com.course_catalog.course_catalog_service.exception.CourseNotFoundException
-import com.course_catalog.course_catalog_service.exception.InstructorNotValidException
-import com.course_catalog.course_catalog_service.repository.CourseRepository
+import com.coursecatalog.dto.CourseDTO
+import com.coursecatalog.entity.Course
+import com.coursecatalog.exception.CourseNotFoundException
+import com.coursecatalog.exception.InstructorNotValidException
+import com.coursecatalog.repository.CourseRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
 

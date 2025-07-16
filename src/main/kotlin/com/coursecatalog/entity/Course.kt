@@ -1,4 +1,4 @@
-package com.course_catalog.course_catalog_service.entity
+package com.coursecatalog.entity
 
 import jakarta.persistence.*
 

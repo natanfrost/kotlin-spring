@@ -1,6 +1,6 @@
-package com.course_catalog.course_catalog_service.exceptionhandler
+package com.coursecatalog.exceptionhandler
 
-import com.course_catalog.course_catalog_service.exception.InstructorNotValidException
+import com.coursecatalog.exception.InstructorNotValidException
 import mu.KLogging
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
