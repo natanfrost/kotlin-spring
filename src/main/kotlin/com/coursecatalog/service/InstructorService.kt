@@ -1,8 +1,8 @@
-package com.course_catalog.course_catalog_service.service
+package com.coursecatalog.service
 
-import com.course_catalog.course_catalog_service.dto.InstructorDTO
-import com.course_catalog.course_catalog_service.entity.Instructor
-import com.course_catalog.course_catalog_service.repository.InstructorRepository
+import com.coursecatalog.dto.InstructorDTO
+import com.coursecatalog.entity.Instructor
+import com.coursecatalog.repository.InstructorRepository
 import org.springframework.stereotype.Service
 import java.util.*
 

@@ -1,3 +1,3 @@
-package com.course_catalog.course_catalog_service.exception
+package com.coursecatalog.exception
 
 class InstructorNotValidException(message: String) : RuntimeException(message)

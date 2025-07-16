@@ -1,4 +1,4 @@
-package com.course_catalog.course_catalog_service.dto;
+package com.coursecatalog.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull

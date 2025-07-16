@@ -1,4 +1,4 @@
-package com.course_catalog.course_catalog_service
+package com.coursecatalog
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class CourseCatalogServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<CourseCatalogServiceApplication>(*args)
+    runApplication<CourseCatalogServiceApplication>(*args)
 }
